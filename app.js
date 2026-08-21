@@ -54,8 +54,8 @@ const store = MongoStore.create({
      touchAfter: 24*3600,
 });
 
-store.on("error",()=>{
-    console.log("ERROR in MONGO SESSION STORE",err);
+store.on("error", (err) => {
+    console.log("ERROR in MONGO SESSION STORE", err);
 });
 
 const sessionOptions = {
@@ -121,8 +121,8 @@ app.use("/",userRouter);
 //    console.log("sample saved"),
 //    res.send("successful testing");
 // });
-app.get("/",(req,res,next)=>{
-    res.send("Page not found");
+app.get("/", (req, res) => {
+    res.redirect("/listings");
 });
 
 // app.use((req,res,next)=>{
