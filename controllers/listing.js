@@ -1,8 +1,28 @@
 const Listing = require("../models/listing");
 
 module.exports.indexRoute = async (req,res)=>{
-    let allListing = await Listing.find({});
-    res.render("listings/index.ejs",{allListing});
+    const { q, category } = req.query;
+    let filter = {};
+    if (q) {
+        filter = {
+            $or: [
+                { title: { $regex: q, $options: "i" } },
+                { location: { $regex: q, $options: "i" } },
+                { country: { $regex: q, $options: "i" } },
+                { category: { $regex: q, $options: "i" } }
+            ]
+        };
+    } else if (category) {
+        filter = {
+            $or: [
+                { category: { $regex: category, $options: "i" } },
+                { title: { $regex: category, $options: "i" } },
+                { description: { $regex: category, $options: "i" } }
+            ]
+        };
+    }
+    let allListing = await Listing.find(filter);
+    res.render("listings/index.ejs",{allListing, searchVal: q || ""});
 };
 
 module.exports.newRender = (req,res)=>{
